@@ -3,6 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// The DOTs component that will be added to entities.
+/// DOTs components shouldn't have any functions ideally.
 /// </summary>
 public struct MoveSpeed : IComponentData
 {
@@ -18,7 +19,7 @@ public class MoveSpeedComponent : MonoBehaviour
     public float Value;
 
     /// <summary>
-    /// A class to bake a <see cref="MoveSpeedComponent"/> <see cref="MonoBehaviour"/> into a <see cref="MoveSpeed"/> DOTs component.
+    /// A class to bake a <see cref="MoveSpeedComponent"/> into a <see cref="MoveSpeed"/> DOTs component.
     /// </summary>
     public class Baker : Baker<MoveSpeedComponent>
     {
