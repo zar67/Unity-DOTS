@@ -10,6 +10,7 @@ public struct UnitMovement : IComponentData
 {
     public float MoveSpeed;
     public float TurnSpeed;
+    public float TargetDistance;
     public float3 TargetPosition;
 }
 
@@ -21,6 +22,7 @@ public class UnitMovementComponent : MonoBehaviour
 {
     public float MoveSpeed;
     public float TurnSpeed;
+    public float TargetDistance;
 
     /// <summary>
     /// A class to bake a <see cref="UnitMovementComponent"/> into a <see cref="UnitMovement"/> DOTs component.
@@ -34,6 +36,7 @@ public class UnitMovementComponent : MonoBehaviour
             {
                 MoveSpeed = authoring.MoveSpeed,
                 TurnSpeed = authoring.TurnSpeed,
+                TargetDistance = authoring.TargetDistance,
             });
         }
     }
