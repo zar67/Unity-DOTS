@@ -54,9 +54,9 @@ public partial struct UnitMovementJob : IJobEntity
     /// Use <see cref="in"/> for arguments that only need to be readable.
     public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, in UnitMovement movement)
     {
-        if (math.distance(movement.TargetPosition, transform.Position) > movement.TargetDistance)
+        float3 moveDirection = movement.TargetPosition - transform.Position;
+        if (math.lengthsq(moveDirection) > movement.TargetDistance)
         {
-            float3 moveDirection = movement.TargetPosition - transform.Position;
             moveDirection = math.normalize(moveDirection);
             quaternion targetRotation = quaternion.LookRotation(moveDirection, math.up());
             transform.Rotation = math.slerp(transform.Rotation, targetRotation, DeltaTime * movement.TurnSpeed);

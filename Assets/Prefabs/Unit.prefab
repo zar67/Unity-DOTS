@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 3
   TurnSpeed: 10
-  TargetDistance: 2
+  TargetDistance: 4
 --- !u!136 &6058028051142719336
 CapsuleCollider:
   m_ObjectHideFlags: 0
