@@ -29,7 +29,7 @@ public partial struct TargetPositionMovementJob : IJobEntity
 
     /// Use <see cref="ref"/> for arguments that need to be both readable and writeable.
     /// Use <see cref="in"/> for arguments that only need to be readable.
-    public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, in TargetPositionMovement movement)
+    public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, ref TargetPositionMovement movement)
     {
         float3 moveDirection = movement.Target - transform.Position;
         if (math.lengthsq(moveDirection) > movement.ReachedDistance)
@@ -43,6 +43,7 @@ public partial struct TargetPositionMovementJob : IJobEntity
         }
         else
         {
+            movement.IsMovingToTarget = false;
             velocity.Linear = float3.zero;
         }
     }

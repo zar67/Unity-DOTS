@@ -13,6 +13,7 @@ partial struct TargetEntityMovementSystem : ISystem
             {
                 LocalTransform targetPosition = SystemAPI.GetComponent<LocalTransform>(entityMovement.ValueRO.Target);
                 positionMovement.ValueRW.Target = targetPosition.Position;
+                positionMovement.ValueRW.IsMovingToTarget = true;
             }
         }
     }

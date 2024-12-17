@@ -12,6 +12,7 @@ public struct TargetPositionMovement : IComponentData
     public float TurnSpeed;
     public float ReachedDistance;
     public float3 Target;
+    public bool IsMovingToTarget;
 }
 
 /// <summary>

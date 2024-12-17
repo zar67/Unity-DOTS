@@ -169,6 +169,7 @@ public class EntitySelectionManager : MonoBehaviourSingleton<EntitySelectionMana
         {
             TargetPositionMovement movement = movementArray[i];
             movement.Target = targetPositions[i];
+            movement.IsMovingToTarget = true;
             movementArray[i] = movement;
         }
 
