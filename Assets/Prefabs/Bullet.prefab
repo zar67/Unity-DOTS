@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2739801153893634561}
   - component: {fileID: 5213104712761312094}
+  - component: {fileID: 5959990608825623433}
   - component: {fileID: 1914240684216363945}
   - component: {fileID: 63430852033584979}
   - component: {fileID: 6944605361173539332}
@@ -49,8 +50,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff066cc04cfdfe54aa78920f72bc5ffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 5
-  TurnSpeed: 20
+--- !u!114 &5959990608825623433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6098493907114848370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c22738427b0507d4eb25b32895f262aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MoveSpeed: 3
+  TurnSpeed: 10
   ReachedDistance: 0.1
 --- !u!114 &1914240684216363945
 MonoBehaviour:
@@ -66,7 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackDelay: 0.5
   Damage: 10
-  CollisionDistance: 12
+  CollisionDistance: 3.5
   DestroyOnNoTarget: 1
   DestroyOnHit: 1
 --- !u!114 &63430852033584979

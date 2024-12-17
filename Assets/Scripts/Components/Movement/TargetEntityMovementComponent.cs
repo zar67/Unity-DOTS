@@ -7,10 +7,6 @@ using UnityEngine;
 /// </summary>
 public struct TargetEntityMovement : IComponentData
 {
-    public float MoveSpeed;
-    public float TurnSpeed;
-    public float ReachedDistance;
-
     public Entity Target;
 }
 
@@ -20,10 +16,6 @@ public struct TargetEntityMovement : IComponentData
 /// </summary>
 public class TargetEntityMovementComponent : MonoBehaviour
 {
-    public float MoveSpeed = 5f;
-    public float TurnSpeed = 20f;
-    public float ReachedDistance = 0.1f;
-
     /// <summary>
     /// A class to bake a <see cref="TargetEntityMovementComponent"/> into a <see cref="TargetEntityMovement"/> DOTs component.
     /// </summary>
@@ -34,9 +26,7 @@ public class TargetEntityMovementComponent : MonoBehaviour
             Entity entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new TargetEntityMovement()
             {
-                MoveSpeed = authoring.MoveSpeed,
-                TurnSpeed = authoring.TurnSpeed,
-                ReachedDistance = authoring.ReachedDistance,
+
             });
         }
     }

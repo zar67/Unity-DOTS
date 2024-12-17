@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public struct ProjectileAttacker : IComponentData
 {
+    public float FiringDistanceFromTarget;
+    public float FiringDistanceReachedDistance;
     public float AttackDelay;
     public float AttackTimer;
     public Entity ProjectileEntity;
@@ -20,6 +22,8 @@ public struct ProjectileAttacker : IComponentData
 /// </summary>
 public class ProjectileAttackerComponent : MonoBehaviour
 {
+    public float FiringDistanceFromTarget = 5f;
+    public float FiringDistanceReachedDistance = 1f;
     public float AttackDelay = 0.2f;
     public Transform ProjecileStartTransform;
     public GameObject ProjectilePrefab;
@@ -34,6 +38,8 @@ public class ProjectileAttackerComponent : MonoBehaviour
             Entity entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new ProjectileAttacker()
             {
+                FiringDistanceFromTarget = authoring.FiringDistanceFromTarget,
+                FiringDistanceReachedDistance = authoring.FiringDistanceReachedDistance,
                 AttackDelay = authoring.AttackDelay,
                 ProjectileEntity = GetEntity(authoring.ProjectilePrefab, TransformUsageFlags.Dynamic),
                 ProjectileOffset = authoring.ProjecileStartTransform.localPosition,

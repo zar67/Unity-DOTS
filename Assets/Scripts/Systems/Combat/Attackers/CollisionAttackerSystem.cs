@@ -12,14 +12,15 @@ partial struct CollisionAttackerSystem : ISystem
 
         foreach ((RefRO<LocalTransform> transform, RefRW<CollisionAttacker> attacker, RefRO<AttackTarget> target, Entity entity) in SystemAPI.Query<RefRO<LocalTransform>, RefRW<CollisionAttacker>, RefRO<AttackTarget>>().WithEntityAccess())
         {
-            if (target.ValueRO.ActiveTarget == Entity.Null && attacker.ValueRO.DestroyOnNoTarget)
+            if ((target.ValueRO.ActiveTarget == Entity.Null || !SystemAPI.HasComponent<LocalTransform>(target.ValueRO.ActiveTarget)) && 
+                attacker.ValueRO.DestroyOnNoTarget)
             {
                 entityCommandBuffer.DestroyEntity(entity);
                 continue;
             }
 
             LocalTransform targetTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.ActiveTarget);
-            if (math.distancesq(targetTransform.Position, transform.ValueRO.Position) <= attacker.ValueRO.CollisionDistance)
+            if (math.distance(targetTransform.Position, transform.ValueRO.Position) <= attacker.ValueRO.CollisionDistance)
             {
                 attacker.ValueRW.AttackTimer += SystemAPI.Time.DeltaTime;
 
