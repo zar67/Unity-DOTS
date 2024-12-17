@@ -17,11 +17,13 @@ partial struct ProjectileAttackerSystem : ISystem
 
                 float distanceToTarget = math.distance(targetTransform.Position, transform.ValueRO.Position);
 
-                if (!movement.ValueRO.IsMovingToTarget && distanceToTarget >= attacker.ValueRO.FiringDistanceFromTarget + attacker.ValueRO.FiringDistanceReachedDistance)
+                if (!movement.ValueRO.IsMovingToTarget && 
+                    (distanceToTarget >= attacker.ValueRO.FiringDistanceFromTarget + attacker.ValueRO.FiringDistanceReachedDistance ||
+                     distanceToTarget <= attacker.ValueRO.FiringDistanceFromTarget - attacker.ValueRO.FiringDistanceReachedDistance))
                 {
                     float3 directionVector = transform.ValueRO.Position - targetTransform.Position;
                     directionVector = math.normalize(directionVector);
-                    float3 newTargetPosition = directionVector * attacker.ValueRO.FiringDistanceFromTarget;
+                    float3 newTargetPosition = targetTransform.Position + (directionVector * attacker.ValueRO.FiringDistanceFromTarget);
                     movement.ValueRW.Target = newTargetPosition;
                     movement.ValueRW.IsMovingToTarget = true;
                     continue;

@@ -1,6 +1,7 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 
@@ -27,17 +28,29 @@ partial struct RangeAttackTargetLocatorSystem : ISystem
                 distanceHitList.Clear();
                 if (physics.CollisionWorld.OverlapSphere(transform.ValueRO.Position, attacker.ValueRO.AttackRange, ref distanceHitList, collisionFilter))
                 {
+                    float smallestDistance = float.MaxValue;
+                    Entity closestEntity = Entity.Null;
                     foreach (DistanceHit distanceHit in distanceHitList)
                     {
-                        if (SystemAPI.HasComponent<FactionObject>(distanceHit.Entity))
+                        if (SystemAPI.HasComponent<Attackable>(distanceHit.Entity))
                         {
-                            FactionObject targetObject = SystemAPI.GetComponent<FactionObject>(distanceHit.Entity);
+                            Attackable targetObject = SystemAPI.GetComponent<Attackable>(distanceHit.Entity);
                             if (attacker.ValueRO.TargetFaction == targetObject.Faction)
                             {
-                                target.ValueRW.ActiveTarget = distanceHit.Entity;
+                                float distance = math.distancesq(transform.ValueRO.Position, distanceHit.Position);
+                                if (closestEntity == Entity.Null || smallestDistance > distance)
+                                {
+                                    closestEntity = distanceHit.Entity;
+                                    smallestDistance = distance;
+                                }
                                 break;
                             }
                         }
+                    }
+
+                    if (closestEntity != Entity.Null)
+                    {
+                        target.ValueRW.ActiveTarget = closestEntity;
                     }
                 }
                 else
