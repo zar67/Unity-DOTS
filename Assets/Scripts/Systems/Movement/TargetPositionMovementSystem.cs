@@ -32,7 +32,7 @@ public partial struct TargetPositionMovementJob : IJobEntity
     public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, ref TargetPositionMovement movement)
     {
         float3 moveDirection = movement.Target - transform.Position;
-        if (math.lengthsq(moveDirection) > movement.ReachedDistance)
+        if (math.length(moveDirection) > movement.ReachedDistance)
         {
             moveDirection = math.normalize(moveDirection);
             moveDirection.y = 0;
