@@ -142,6 +142,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7886213343832061209, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
+      propertyPath: Faction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7921266062290520541, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
+      propertyPath: AttackRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7921266062290520541, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
+      propertyPath: TargetFaction
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8197252679584815729, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -154,10 +166,10 @@ PrefabInstance:
       addedObject: {fileID: 5620582810649140879}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 591972522987646664, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 3892869092492878852}
+      insertIndex: 5
+      addedObject: {fileID: 8554335080725045579}
     - targetCorrespondingSourceObject: {fileID: 591972522987646664, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
-      insertIndex: 2
+      insertIndex: 6
       addedObject: {fileID: 7431625208342477459}
   m_SourcePrefab: {fileID: 100100000, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
 --- !u!4 &1323614978139374419 stripped
@@ -170,7 +182,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 591972522987646664, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
   m_PrefabInstance: {fileID: 8374987936072709397}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3892869092492878852
+--- !u!114 &8554335080725045579
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,9 +191,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8939351657216728029}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fea6186983307249b3c453a03caf5bb, type: 3}
+  m_Script: {fileID: 11500000, guid: ae950b5d1c5fdc14dbca91694ead034b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShootDelay: 0.2
 --- !u!114 &7431625208342477459
 MonoBehaviour:
   m_ObjectHideFlags: 0
