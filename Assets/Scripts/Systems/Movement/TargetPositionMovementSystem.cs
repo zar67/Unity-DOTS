@@ -35,6 +35,7 @@ public partial struct TargetPositionMovementJob : IJobEntity
         if (math.lengthsq(moveDirection) > movement.ReachedDistance)
         {
             moveDirection = math.normalize(moveDirection);
+            moveDirection.y = 0;
             var targetRotation = quaternion.LookRotation(moveDirection, math.up());
             transform.Rotation = math.slerp(transform.Rotation, targetRotation, DeltaTime * movement.TurnSpeed);
 
