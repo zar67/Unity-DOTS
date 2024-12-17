@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4643460184573794951}
   - component: {fileID: 2555370068601977805}
   - component: {fileID: 7921266062290520541}
+  - component: {fileID: 269372926722209958}
   - component: {fileID: 6058028051142719336}
   - component: {fileID: 3211704161477214236}
   - component: {fileID: 4613377224803727197}
@@ -95,6 +96,18 @@ MonoBehaviour:
   AttackRange: 5
   TargetFaction: -1
   TargetUpdateDelay: 0.2
+--- !u!114 &269372926722209958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591972522987646664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82346d8efe1024b4bacdc71b0f9c4e21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &6058028051142719336
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -159,16 +159,16 @@ public class EntitySelectionManager : MonoBehaviourSingleton<EntitySelectionMana
 
         /// <see cref="Allocator"/> determines the lifetime of the memory.
         /// <see cref="Allocator.Temp"/> means the memory will be cleaned up at the end of the frame.
-        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<TargetBasedMovement, Selected>().Build(entityManager);
+        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<TargetPositionMovement, Selected>().Build(entityManager);
 
-        NativeArray<TargetBasedMovement> movementArray = entityQuery.ToComponentDataArray<TargetBasedMovement>(Allocator.Temp);
+        NativeArray<TargetPositionMovement> movementArray = entityQuery.ToComponentDataArray<TargetPositionMovement>(Allocator.Temp);
 
         NativeArray<float3> targetPositions = GetFormationTargetPositions(mouseWorldPosition, movementArray.Length);
 
         for (int i = 0; i < movementArray.Length; i++)
         {
-            TargetBasedMovement movement = movementArray[i];
-            movement.TargetPosition = targetPositions[i];
+            TargetPositionMovement movement = movementArray[i];
+            movement.Target = targetPositions[i];
             movementArray[i] = movement;
         }
 

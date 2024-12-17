@@ -4,9 +4,8 @@ using Unity.Entities;
 using Unity.Physics;
 using Unity.Transforms;
 
-partial struct AttackerTargetSystem : ISystem
+partial struct RangeAttackTargetLocatorSystem : ISystem
 {
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         PhysicsWorldSingleton physics = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
@@ -19,7 +18,7 @@ partial struct AttackerTargetSystem : ISystem
             GroupIndex = 0
         };
 
-        foreach ((RefRO<LocalTransform> transform, RefRW<Attacker> attacker) in SystemAPI.Query<RefRO<LocalTransform>, RefRW<Attacker>>())
+        foreach ((RefRO<LocalTransform> transform, RefRW<RangeAttackTargetLocator> attacker, RefRW<AttackTarget> target) in SystemAPI.Query<RefRO<LocalTransform>, RefRW<RangeAttackTargetLocator>, RefRW<AttackTarget>>())
         {
             attacker.ValueRW.TargetUpdateTimer += SystemAPI.Time.DeltaTime;
 
@@ -30,17 +29,20 @@ partial struct AttackerTargetSystem : ISystem
                 {
                     foreach (DistanceHit distanceHit in distanceHitList)
                     {
-                        FactionObject target = SystemAPI.GetComponent<FactionObject>(distanceHit.Entity);
-                        if (attacker.ValueRO.TargetFaction == target.Faction)
+                        if (SystemAPI.HasComponent<FactionObject>(distanceHit.Entity))
                         {
-                            attacker.ValueRW.ActiveTarget = distanceHit.Entity;
-                            break;
+                            FactionObject targetObject = SystemAPI.GetComponent<FactionObject>(distanceHit.Entity);
+                            if (attacker.ValueRO.TargetFaction == targetObject.Faction)
+                            {
+                                target.ValueRW.ActiveTarget = distanceHit.Entity;
+                                break;
+                            }
                         }
                     }
                 }
                 else
                 {
-                    attacker.ValueRW.ActiveTarget = Entity.Null;
+                    target.ValueRW.ActiveTarget = Entity.Null;
                 }
 
                 attacker.ValueRW.TargetUpdateTimer = 0f;
