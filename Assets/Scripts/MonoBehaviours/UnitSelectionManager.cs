@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
     public event EventHandler<Vector2> OnSelectionAreaEnd;
 
     [SerializeField] private float m_minimumSelectionAreaSize = 40f;
+    [SerializeField] private float m_idealDistanceBetweenEntities = 2f;
 
     private Vector2 m_selectionStartMousePosition;
 
@@ -51,7 +53,7 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
 
         if (Input.GetMouseButtonDown(1))
         {
-            SetTargetsOfSelectedEntities();
+            SetTargetPositionsOfSelectedEntities();
         }
     }
 
@@ -132,7 +134,7 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
         }
     }
 
-    private void SetTargetsOfSelectedEntities()
+    private void SetTargetPositionsOfSelectedEntities()
     {
         Vector3 mouseWorldPosition = MousePositionManager.Instance.GetWorldPosition();
 
@@ -143,15 +145,63 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
         EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<TargetBasedMovement, Selected>().Build(entityManager);
 
         NativeArray<TargetBasedMovement> movementArray = entityQuery.ToComponentDataArray<TargetBasedMovement>(Allocator.Temp);
+
+        NativeArray<float3> targetPositions = GetFormationTargetPositions(mouseWorldPosition, movementArray.Length);
+
         for (int i = 0; i < movementArray.Length; i++)
         {
             TargetBasedMovement movement = movementArray[i];
-            movement.TargetPosition = mouseWorldPosition;
+            movement.TargetPosition = targetPositions[i];
             movementArray[i] = movement;
         }
 
         // Update the data on all the components.
         // This is needed because the components are structs (a type value) not a reference value so any changes will apply to the copy of the data not the original data.
         entityQuery.CopyFromComponentDataArray(movementArray);
+    }
+
+    /// <summary>
+    /// Gets a formation of positions around a central point in rings out from the origin.
+    /// </summary>
+    /// <param name="origin">The central point for the formation.</param>
+    /// <param name="positionCount">The number of positions to generate.</param>
+    /// <returns>An array of positions with the length of <paramref name="positionCount"/></returns>
+    private NativeArray<float3> GetFormationTargetPositions(float3 origin, int positionCount)
+    {
+        var positionArray = new NativeArray<float3>(positionCount, Allocator.Temp);
+
+        if (positionCount > 0)
+        {
+            positionArray[0] = origin;
+        }
+        
+        if (positionCount > 1)
+        {
+            int ringCount = 1;
+            int positionIndex = 1;
+            while (positionIndex < positionCount)
+            {
+                float ringRadius = ringCount * m_idealDistanceBetweenEntities;
+                float ringCircumfrence = math.PI * ringRadius * 2;
+                int positionsInRing = (int)math.floor(ringCircumfrence / m_idealDistanceBetweenEntities);
+                for (int i = 0; i < positionsInRing; i++)
+                {
+                    float angle = i * (math.PI2 / positionsInRing);
+                    float3 positionVector = math.rotate(quaternion.RotateY(angle), new float3(0, 0, ringRadius));
+
+                    positionArray[positionIndex] = origin + positionVector;
+                    positionIndex++;
+
+                    if (positionIndex >= positionCount)
+                    {
+                        break;
+                    }
+                }
+
+                ringCount++;
+            }
+        }
+
+        return positionArray;
     }
 }

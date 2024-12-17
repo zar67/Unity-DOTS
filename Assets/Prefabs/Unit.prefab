@@ -64,7 +64,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 3
   TurnSpeed: 10
-  TargetDistance: 4
+  TargetDistance: 0.1
 --- !u!114 &5863877484411317122
 MonoBehaviour:
   m_ObjectHideFlags: 0

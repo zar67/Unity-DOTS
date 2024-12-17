@@ -713,6 +713,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5612b7d43af4744d82ffd8ee38285cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_minimumSelectionAreaSize: 40
+  m_idealDistanceBetweenEntities: 2.5
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
