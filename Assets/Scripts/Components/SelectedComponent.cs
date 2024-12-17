@@ -9,6 +9,9 @@ public struct Selected : IComponentData, IEnableableComponent
 {
     public Entity SelectedVisual;
     public float SelectedShowScale;
+
+    public bool OnSelected;
+    public bool OnDeselected;
 }
 
 /// <summary>

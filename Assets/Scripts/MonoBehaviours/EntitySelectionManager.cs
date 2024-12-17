@@ -6,7 +6,7 @@ using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
-public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
+public class EntitySelectionManager : MonoBehaviourSingleton<EntitySelectionManager>
 {
     public event EventHandler<Vector2> OnSelectionAreaStart;
     public event EventHandler<Vector2> OnSelectionAreaEnd;
@@ -78,8 +78,9 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
     {
         EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<LocalTransform, PlayerUnit>().WithPresent<Selected>().Build(entityManager);
-        NativeArray<Entity>  entityArray = entityQuery.ToEntityArray(Allocator.Temp);
+        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<LocalTransform>().WithPresent<Selected>().Build(entityManager);
+        NativeArray<Entity> entityArray = entityQuery.ToEntityArray(Allocator.Temp);
+        NativeArray<Selected> selectedArray = entityQuery.ToComponentDataArray<Selected>(Allocator.Temp);
         NativeArray<LocalTransform> transformArray = entityQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
         for (int i = 0; i < transformArray.Length; i++)
         {
@@ -88,6 +89,12 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
             if (selectionArea.Contains(entityScreenPosition))
             {
                 entityManager.SetComponentEnabled<Selected>(entityArray[i], true);
+                Selected selected = selectedArray[i];
+                selected.OnSelected = true;
+
+                /// Cannot use <see cref="EntityQuery.CopyFromComponentDataArray"/> after this for loop as when we disable the component the <see cref="EntityQuery"/> will update.
+                /// Meaning the length of data in the <see cref="EntityQuery"/> will be 0, but will have more than 0 items in the selectedArray.
+                entityManager.SetComponentData(entityArray[i], selected);
             }
         }
     }
@@ -117,6 +124,9 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
             entityManager.HasComponent<Selected>(hit.Entity))
         {
             entityManager.SetComponentEnabled<Selected>(hit.Entity, true);
+            Selected selected = entityManager.GetComponentData<Selected>(hit.Entity);
+            selected.OnSelected = true;
+            entityManager.SetComponentData(hit.Entity, selected);
         }
     }
 
@@ -126,11 +136,18 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
 
         /// <see cref="Allocator"/> determines the lifetime of the memory.
         /// <see cref="Allocator.Temp"/> means the memory will be cleaned up at the end of the frame.
-        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<LocalTransform, PlayerUnit, Selected>().Build(entityManager);
+        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<LocalTransform, Selected>().Build(entityManager);
         NativeArray<Entity> entityArray = entityQuery.ToEntityArray(Allocator.Temp);
+        NativeArray<Selected> selectedArray = entityQuery.ToComponentDataArray<Selected>(Allocator.Temp);
         for (int i = 0; i < entityArray.Length; i++)
         {
             entityManager.SetComponentEnabled<Selected>(entityArray[i], false);
+            Selected selected = selectedArray[i];
+            selected.OnDeselected = true;
+
+            /// Cannot use <see cref="EntityQuery.CopyFromComponentDataArray"/> after this for loop as when we disable the component the <see cref="EntityQuery"/> will update.
+            /// Meaning the length of data in the <see cref="EntityQuery"/> will be 0, but will have more than 0 items in the selectedArray.
+            entityManager.SetComponentData(entityArray[i], selected);
         }
     }
 

@@ -8,8 +8,8 @@ public class SelectionUIManager : MonoBehaviour
 
     private void Start()
     {
-        UnitSelectionManager.Instance.OnSelectionAreaStart += HandleSelectionBegin;
-        UnitSelectionManager.Instance.OnSelectionAreaEnd += HandleSelectionEnd;
+        EntitySelectionManager.Instance.OnSelectionAreaStart += HandleSelectionBegin;
+        EntitySelectionManager.Instance.OnSelectionAreaEnd += HandleSelectionEnd;
 
         m_selectionAreaTransform.gameObject.SetActive(false);
     }
@@ -35,7 +35,7 @@ public class SelectionUIManager : MonoBehaviour
 
     private void UpdateSelectionArea()
     {
-        Rect selectionArea = UnitSelectionManager.Instance.GetSelectionArea();
+        Rect selectionArea = EntitySelectionManager.Instance.GetSelectionArea();
 
         float canvasScale = m_canvas.transform.localScale.x;
 
