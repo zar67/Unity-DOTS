@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
 {
     public event EventHandler<Vector2> OnSelectionAreaStart;
     public event EventHandler<Vector2> OnSelectionAreaEnd;
+
+    [SerializeField] private float m_minimumSelectionAreaSize = 40f;
 
     private Vector2 m_selectionStartMousePosition;
 
@@ -35,12 +38,14 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
         if (Input.GetMouseButtonDown(0))
         {
             m_selectionStartMousePosition = Input.mousePosition;
+
             OnSelectionAreaStart?.Invoke(this, m_selectionStartMousePosition);
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            SelectEntitiesInSelectionArea();
+            SelectEntities();
+
             OnSelectionAreaEnd?.Invoke(this, Input.mousePosition);
         }
 
@@ -50,23 +55,29 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
         }
     }
 
-    private void SelectEntitiesInSelectionArea()
+    private void SelectEntities()
     {
-        Rect selectionArea = GetSelectionArea();
+        DeselectAllEntities();
 
+        Rect selectionArea = GetSelectionArea();
+        float areaSize = selectionArea.width + selectionArea.height;
+
+        if (areaSize > m_minimumSelectionAreaSize)
+        {
+            SelectAllEntitiesInSelectionArea(selectionArea);
+        }
+        else
+        {
+            SelectSingleEntity();
+        }
+    }
+
+    private void SelectAllEntitiesInSelectionArea(Rect selectionArea)
+    {
         EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-        /// <see cref="Allocator"/> determines the lifetime of the memory.
-        /// <see cref="Allocator.Temp"/> means the memory will be cleaned up at the end of the frame.
-        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<LocalTransform, PlayerUnit, Selected>().Build(entityManager);
-        NativeArray<Entity> entityArray = entityQuery.ToEntityArray(Allocator.Temp);
-        for (int i = 0; i < entityArray.Length; i++)
-        {
-            entityManager.SetComponentEnabled<Selected>(entityArray[i], false);
-        }
-
-        entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<LocalTransform, PlayerUnit>().WithPresent<Selected>().Build(entityManager);
-        entityArray = entityQuery.ToEntityArray(Allocator.Temp);
+        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<LocalTransform, PlayerUnit>().WithPresent<Selected>().Build(entityManager);
+        NativeArray<Entity>  entityArray = entityQuery.ToEntityArray(Allocator.Temp);
         NativeArray<LocalTransform> transformArray = entityQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
         for (int i = 0; i < transformArray.Length; i++)
         {
@@ -76,6 +87,48 @@ public class UnitSelectionManager : MonoBehaviourSingleton<UnitSelectionManager>
             {
                 entityManager.SetComponentEnabled<Selected>(entityArray[i], true);
             }
+        }
+    }
+
+    private void SelectSingleEntity()
+    {
+        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+        /// Alternative way of writing an <see cref="EntityQuery"/> instead of using <see cref="EntityQueryBuilder"/>.
+        EntityQuery entityQuery = entityManager.CreateEntityQuery(typeof(PhysicsWorldSingleton));
+
+        PhysicsWorldSingleton physics = entityQuery.GetSingleton<PhysicsWorldSingleton>();
+        UnityEngine.Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var raycastInput = new RaycastInput()
+        {
+            Start = cameraRay.GetPoint(0f),
+            End = cameraRay.GetPoint(999999f),
+            Filter = new CollisionFilter()
+            {
+                BelongsTo = ~0u, // Any layer
+                CollidesWith = ~0u, // Any layer
+                GroupIndex = 0
+            }
+        };
+
+        if (physics.CollisionWorld.CastRay(raycastInput, out Unity.Physics.RaycastHit hit) && 
+            entityManager.HasComponent<Selected>(hit.Entity))
+        {
+            entityManager.SetComponentEnabled<Selected>(hit.Entity, true);
+        }
+    }
+
+    private void DeselectAllEntities()
+    {
+        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+        /// <see cref="Allocator"/> determines the lifetime of the memory.
+        /// <see cref="Allocator.Temp"/> means the memory will be cleaned up at the end of the frame.
+        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<LocalTransform, PlayerUnit, Selected>().Build(entityManager);
+        NativeArray<Entity> entityArray = entityQuery.ToEntityArray(Allocator.Temp);
+        for (int i = 0; i < entityArray.Length; i++)
+        {
+            entityManager.SetComponentEnabled<Selected>(entityArray[i], false);
         }
     }
 
