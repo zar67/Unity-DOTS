@@ -10,6 +10,8 @@ public struct Health : IComponentData
 {
     public int MaxHealth;
     public int CurrentHealth;
+
+    public bool OnHealthChanged;
 }
 
 /// <summary>
@@ -32,6 +34,7 @@ public class HealthComponent : MonoBehaviour
             {
                 MaxHealth = authoring.MaxHealth,
                 CurrentHealth = authoring.MaxHealth,
+                OnHealthChanged = true,
             });
         }
     }

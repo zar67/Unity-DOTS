@@ -75,6 +75,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 591972522987646664, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
       insertIndex: 6
       addedObject: {fileID: 1551110937250251158}
+    - targetCorrespondingSourceObject: {fileID: 591972522987646664, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
+      insertIndex: 7
+      addedObject: {fileID: -7703754516952259546}
   m_SourcePrefab: {fileID: 100100000, guid: ed95c3ed0554122448bd0d864de4d430, type: 3}
 --- !u!1 &5179974708705934210 stripped
 GameObject:
@@ -97,3 +100,20 @@ MonoBehaviour:
   MaxMoveDistance: 5
   MovementDelayMin: 0.2
   MovementDelayMax: 2
+--- !u!114 &-7703754516952259546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5179974708705934210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cc9d0915ea1de445bf9bb50bf930077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackDelay: 0.5
+  Damage: 10
+  CollisionDistance: 5
+  DestroyOnNoTarget: 0
+  DestroyOnHit: 0

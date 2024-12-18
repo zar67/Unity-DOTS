@@ -43,9 +43,6 @@ partial struct ProjectileAttackerSystem : ISystem
                     float3 rotatedOffset = math.rotate(transform.ValueRO.Rotation, attacker.ValueRO.ProjectileOffset);
                     SystemAPI.SetComponent(projectile, LocalTransform.FromPosition(transform.ValueRO.Position + rotatedOffset));
 
-                    RefRW<TargetEntityMovement> projectileMovement = SystemAPI.GetComponentRW<TargetEntityMovement>(projectile);
-                    projectileMovement.ValueRW.Target = target.ValueRO.ActiveTarget;
-
                     RefRW<AttackTarget> projectileAttackTarget = SystemAPI.GetComponentRW<AttackTarget>(projectile);
                     projectileAttackTarget.ValueRW.ActiveTarget = target.ValueRO.ActiveTarget;
 

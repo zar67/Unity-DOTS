@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2739801153893634561}
-  - component: {fileID: 5213104712761312094}
   - component: {fileID: 5959990608825623433}
   - component: {fileID: 1914240684216363945}
   - component: {fileID: 63430852033584979}
@@ -38,18 +37,6 @@ Transform:
   - {fileID: 7700838130196824378}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5213104712761312094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6098493907114848370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff066cc04cfdfe54aa78920f72bc5ffa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5959990608825623433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,8 +49,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c22738427b0507d4eb25b32895f262aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 3
-  TurnSpeed: 10
+  MoveSpeed: 10
+  TurnSpeed: 20
   ReachedDistance: 0.1
 --- !u!114 &1914240684216363945
 MonoBehaviour:
@@ -162,7 +149,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2739801153893634561}
