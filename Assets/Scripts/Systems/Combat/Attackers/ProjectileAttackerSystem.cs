@@ -29,6 +29,11 @@ partial struct ProjectileAttackerSystem : ISystem
                     continue;
                 }
 
+                if (movement.ValueRO.IsMovingToTarget)
+                {
+                    continue;
+                }
+
                 float3 aimDirection = targetTransform.Position - transform.ValueRO.Position;
                 aimDirection = math.normalize(aimDirection);
 
